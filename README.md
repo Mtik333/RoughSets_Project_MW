@@ -15,10 +15,9 @@ As I've heard, this is a quite difficult to optimize such operation (that's why 
 I don't think anybody will need such app when there's R gui that works surely better (except wrong core detection), but I tried all my best to make this app working well.
 I'm grateful for all help and especially listening to my complaints about the app I made  - Kamil, Przemysław and Tomasz, thank you.
 
---------------------------------------------------------------------------------
+```
 "THE BEER-WARE LICENSE":
-
 <mtik333@gmail.com> wrote this file. As long as you retain this notice
-you can do whatever you want with this stuff. If we meet some day, and you think
+you can do whatever you want with this stuff. If we meet some day and you think
 this stuff is worth it, you can buy me a beer in return. -Mateusz Walendziuk
---------------------------------------------------------------------------------
+```
