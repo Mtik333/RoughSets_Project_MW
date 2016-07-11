@@ -6,9 +6,12 @@
 package projektsi_redukt;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,10 +30,33 @@ public class Logic {
     public int reduct_counter = 0;
     public String core="";
 
-    public String usingCSV() throws FileNotFoundException, IOException {
+    public String usingCSV() throws FileNotFoundException, IOException, URISyntaxException {
         Scanner console = new Scanner(System.in);
-        System.out.println("Enter filepath: ");
-        String filePath = console.nextLine();
+        String filePath="";
+        System.out.println("If you want to oad example, write LOAD for load example - if you want to load your own example, enter filepath");
+        filePath=console.nextLine();
+        if (filePath.equalsIgnoreCase("load")){
+            filePath=choose_example();
+            if (filePath.equals("")){
+                System.out.println("You didn't choose any of examples, so enter path to one you had on your disk");
+                filePath = console.nextLine();
+            }
+            //filePath=filePath.replace("file:/","");
+            //filePath=filePath.replaceAll("/", "\\\\").replaceAll("%20", " ");
+        }
+
+            //System.out.println("Enter filepath: ");
+            //filePath = console.nextLine();
+            if(!filePath.endsWith(".csv"))
+            {
+                System.out.println("Wrong file, program is being closed");
+                System.exit(0);
+            }
+            File f = new File(filePath); 
+            if (!f.exists()) { 
+                System.out.println("File does not exists."); 
+                System.exit(0);
+            }
         System.out.println(filePath);
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         loaded_attributes = br.readLine().split(",");
@@ -40,19 +66,38 @@ public class Logic {
             System.out.print("Index: " + i + " Name: " + x + ";\n");
             i++;
         }
-        System.out.println("Found " + loaded_attributes.length + " attributes. Is the last one a decision-making? (enter YES or NO)");
-        String next = console.next();
-        if (next.equalsIgnoreCase("YES")) {
-            System.out.println("Fine, thanks");
+        System.out.println("Found " + loaded_attributes.length + " attributes. I guess the last one a decision-making.");
+        //String next = console.next();
+        //if (next.equalsIgnoreCase("YES")) {
+            //System.out.println("Fine, thanks");
             decision_maker = loaded_attributes.length - 1;
-            return filePath;
-        }
+        //    return filePath;
+        //}
         return filePath;
     }
 
+    public String choose_example() throws URISyntaxException{
+        String filePath="";
+        URL url=getClass().getResource("./examples");
+        File dir=new File(url.toURI());
+        File dir_list[]=dir.listFiles();
+        if (dir_list!=null){
+            for (File child: dir_list){
+                System.out.println("Name of the example: "+child.toString().substring(child.toString().lastIndexOf("\\")));
+                System.out.println("Choose this one? (enter YES if yes)");
+                Scanner console = new Scanner(System.in);
+                if (console.next().equalsIgnoreCase("yes")){
+                    filePath=child.toString();
+                    return filePath;
+                }
+            }
+        }
+        return filePath;
+    }
+    
     public ArrayList<Object> openCSV(String filePath) throws FileNotFoundException, IOException {
         ArrayList<Object> all_objects = new ArrayList<>();
-        String csv = "C:\\Users\\Mateusz\\OneDrive\\Studia\\Semestr IV\\Sztuczna inteligencja\\Pracownia\\7-8\\Do sprawozdania\\Zadanie2\\zadanie2-proba3.csv";
+        //String csv = "C:\\Users\\Mateusz\\OneDrive\\Studia\\Semestr IV\\Sztuczna inteligencja\\Pracownia\\7-8\\Do sprawozdania\\Zadanie2\\zadanie2-proba3.csv";
         BufferedReader br;
         String line;
         String cvsSplitBy = ",";
@@ -82,7 +127,7 @@ public class Logic {
             //roughSet.setName("Object "+i);
             //roughSet.setAttributes(all_attributes);
             //roughSet.toString();
-            System.out.println(new_object.getName() + "" + new_object.getAttributes());
+            //System.out.println(new_object.getName() + "" + new_object.getAttributes());
             //new_object.toString();
             all_objects.add(new_object);
         }
@@ -99,7 +144,7 @@ public class Logic {
                     List<Attribute> o1 = objects.get(i).getAttributes();
                     List<Attribute> o2 = objects.get(j).getAttributes();
                     if (o1.get(decision_maker).getValue() == null ? o2.get(decision_maker).getValue() == null : o1.get(decision_maker).getValue().equals(o2.get(decision_maker).getValue())) {
-                        System.out.println("test");
+                        //System.out.println("test");
                         disc_matrix[i][j] = "-";
                     } else {
                         for (int k = 0; k < o1.size(); k++) {
@@ -115,7 +160,7 @@ public class Logic {
                 }
             }
         }
-        System.out.println("test");
+        //System.out.println("test");
         return disc_matrix;
     }
 
@@ -138,7 +183,7 @@ public class Logic {
             }
         }
         for (int i = 0; i < counter.length; i++) {
-            System.out.println(loaded_attributes[i] + ": " + counter[i]);
+            //System.out.println(loaded_attributes[i] + ": " + counter[i]);
         }
     }
 
@@ -152,7 +197,7 @@ public class Logic {
         } while (!empty_matrix(matrix));
         for (int i = 0; i < counter.length; i++) {
             if (used_attributes[i]) {
-                System.out.println(loaded_attributes[i]);
+                //System.out.println(loaded_attributes[i]);
                 used_attributes[i] = false;
             }
         }
@@ -229,7 +274,7 @@ public class Logic {
                     String reduct="";
                     for (int i = 0; i < counter.length; i++) {
                         if (used_attributes[i]) {
-                            System.out.println(loaded_attributes[i]);
+                            //System.out.println(loaded_attributes[i]);
                             reduct=reduct.concat(loaded_attributes[i]+",");
                         }
 //                        if (x.equals(loaded_attributes[i])) {
@@ -316,7 +361,7 @@ public class Logic {
     
     public List<String> remove_redundant(){
         java.util.Collections.sort(all_reducts);
-        System.out.println("test");
+        //System.out.println("test");
         for (int i=0; i<all_reducts.size(); i++){
             for (int j=i+1; j<all_reducts.size(); j++){
                 if (all_reducts.get(i).equals(all_reducts.get(j)))
@@ -333,7 +378,7 @@ public class Logic {
         all_reducts.addAll(final_all_reducts);
         all_reducts_dup.addAll(final_all_reducts);
         final_all_reducts.clear();
-        System.out.println("test2");
+        //System.out.println("test2");
         for (int i=0; i<all_reducts.size(); i++){
             for (int j=0; j<all_reducts_dup.size(); j++){
                 if (i!=j){
